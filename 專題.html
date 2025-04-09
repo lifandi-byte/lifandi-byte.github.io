@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>專題</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row; /* 左右排列 */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        #left-container, #right-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%; /* 左右各占一半空間 */
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            width: 100%;
+        }
+
+        video {
+            width: 100%;
+            max-width: 640px;
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #search-box {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -100px; /* 適當減少負值，避免搜尋框過於靠上 */
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #navigation {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        #navigation ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #navigation li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        /* 手語教學連結樣式 */
+        #navigation a {
+            color: blue;
+            font-size: 18px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #navigation a:hover {
+            color: darkblue;
+            text-decoration: underline;
+        }
+
+        /* 新增登入按鈕固定在右上角 */
+        #login-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: blue;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #login-button:hover {
+            background-color: darkblue;
+        }
+
+        /* 查詢結果顯示框 */
+        #result-box {
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        #result-box p {
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- 右上角登入按鈕 -->
+    <a id="login-button" href="login.html">登入系統</a>
+
+    <div id="left-container">
+        <h1>手語</h1>
+        <video id="camera" autoplay playsinline></video>
+        <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+
+    <div id="right-container">
+        <div id="search-box">
+            <input id="search-input" type="text" placeholder="搜尋...">
+            <button id="search-button" onclick="search()">搜尋</button>
+        </div>
+
+        <!-- 顯示查詢結果的區域 -->
+        <div id="result-box">
+            <p id="result-text">請輸入手語單字來搜尋</p>
+        </div>
+    </div>
+
+    <div id="navigation">
+        <ul>
+            <li><a href="handteach.html">手語教學</a></li>
+        </ul>
+    </div>
+
+    <script>
+        let stream;
+        let cameraOn = true;
+
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                document.getElementById('camera').srcObject = stream;
+            } catch (error) {
+                document.getElementById('error-message').textContent = "無法啟動攝影機：" + error.message;
+            }
+        }
+
+        async function toggleCamera() {
+            if (cameraOn) {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                    document.getElementById('camera').srcObject = null;
+                }
+                document.getElementById('toggle-camera').textContent = '開啟攝影機';
+            } else {
+                await startCamera();
+                document.getElementById('toggle-camera').textContent = '關閉攝影機';
+            }
+            cameraOn = !cameraOn;
+        }
+
+        function search() {
+            let query = document.getElementById('search-input').value;
+            if (query) {
+                // 查詢手語單字的邏輯
+                document.getElementById('result-text').textContent = `正在搜尋手語單字: ${query}`;
+
+                // 你可以在這裡加入手語字典查詢的邏輯
+                // 目前是顯示查詢的字串
+
+                // 如果要開啟搜尋結果頁面，可以像這樣：
+                // window.open(`https://www.google.com/search?q=${query}`, '_blank');
+            }
+        }
+
+        window.onload = startCamera;
+    </script>
+</body>
+</html>
