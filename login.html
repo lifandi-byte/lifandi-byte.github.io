@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>登入頁面</title>
+</head>
+<body>
+    <form action="login.php" method="post">
+        <label for="username">帳號:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">密碼:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <input type="submit" value="登入">
+        <input type="reset" value="重設">
+        <br><br>
+        <button type="button" onclick="window.location.href='專題.html'">返回上一頁</button>
+        <button type="button" onclick="window.location.href='register.html'">註冊帳號</button>
+    </form>
+</body>
+</html>
