@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
-  <title>註冊頁面</title>
+  <title>登入頁面</title>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
   <script>
@@ -20,30 +20,32 @@
   </script>
 </head>
 <body>
-  <h2>註冊帳號</h2>
-  <form onsubmit="register(event)">
+  <h2>登入頁面</h2>
+  <form onsubmit="login(event)">
     <label for="email">帳號（Email）:</label>
     <input type="email" id="email" required><br>
     <label for="password">密碼:</label>
     <input type="password" id="password" required><br><br>
-    <input type="submit" value="註冊"><br><br>
-    <button type="button" onclick="window.location.href='login.html'">返回上一頁</button>
+    <input type="submit" value="登入">
+    <input type="reset" value="重設"><br><br>
+    <button type="button" onclick="window.location.href='專題.html'">返回上一頁</button>
+    <button type="button" onclick="window.location.href='register.html'">註冊帳號</button>
   </form>
 
   <script>
-    function register(event) {
-      event.preventDefault();
+    function login(event) {
+      event.preventDefault(); // 阻止表單自動提交
 
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      firebase.auth().createUserWithEmailAndPassword(email, password)
+      firebase.auth().signInWithEmailAndPassword(email, password)
         .then(userCredential => {
-          alert("註冊成功！");
-          window.location.href = "login.html"; // 註冊後導回登入頁
+          alert("登入成功！");
+          window.location.href = "專題.html"; // 登入後導回首頁
         })
         .catch(error => {
-          alert("註冊失敗：" + error.message);
+          alert("登入失敗：" + error.message);
         });
     }
   </script>
