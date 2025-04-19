@@ -4,8 +4,101 @@
     <meta charset="utf-8">
     <title>專題</title>
     <style>
-        /* (其餘樣式保持不變) */
-        
+        body {
+            display: flex;
+            flex-direction: row; /* 左右排列 */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        #left-container, #right-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%; /* 左右各占一半空間 */
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            width: 100%;
+        }
+
+        video {
+            width: 100%;
+            max-width: 640px;
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #search-box {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -100px; /* 適當減少負值，避免搜尋框過於靠上 */
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #navigation {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        #navigation ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #navigation li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        /* 手語教學連結樣式 */
+        #navigation a {
+            color: blue;
+            font-size: 18px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #navigation a:hover {
+            color: darkblue;
+            text-decoration: underline;
+        }
+
+        /* 新增登入按鈕固定在右上角 */
         #login-button {
             position: absolute;
             top: 20px;
@@ -22,30 +115,28 @@
         #login-button:hover {
             background-color: darkblue;
         }
-        
-        #logout-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
+
+        /* 查詢結果顯示框 */
+        #result-box {
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        #result-box p {
             font-size: 16px;
-            background-color: red;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
+            color: #333;
         }
-
-        #logout-button:hover {
-            background-color: darkred;
-        }
-
     </style>
 </head>
 <body>
-    <!-- 登入/登出按鈕 -->
+    <!-- 右上角登入按鈕 -->
     <a id="login-button" href="login.html">登入系統</a>
-    <a id="logout-button" href="#" style="display: none;" onclick="logout()">登出</a>
 
     <div id="left-container">
         <h1>手語</h1>
@@ -76,25 +167,6 @@
         let stream;
         let cameraOn = true;
 
-        // 檢查登入狀態
-        function checkLoginStatus() {
-            const isLoggedIn = localStorage.getItem("loggedIn");
-
-            if (isLoggedIn === "true") {
-                document.getElementById('login-button').style.display = 'none'; // 隱藏登入按鈕
-                document.getElementById('logout-button').style.display = 'inline'; // 顯示登出按鈕
-            } else {
-                document.getElementById('login-button').style.display = 'inline'; // 顯示登入按鈕
-                document.getElementById('logout-button').style.display = 'none'; // 隱藏登出按鈕
-            }
-        }
-
-        // 登出邏輯
-        function logout() {
-            localStorage.setItem("loggedIn", "false");
-            checkLoginStatus();
-        }
-
         async function startCamera() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
@@ -121,14 +193,18 @@
         function search() {
             let query = document.getElementById('search-input').value;
             if (query) {
+                // 查詢手語單字的邏輯
                 document.getElementById('result-text').textContent = `正在搜尋手語單字: ${query}`;
+
+                // 你可以在這裡加入手語字典查詢的邏輯
+                // 目前是顯示查詢的字串
+
+                // 如果要開啟搜尋結果頁面，可以像這樣：
+                // window.open(`https://www.google.com/search?q=${query}`, '_blank');
             }
         }
 
-        window.onload = function() {
-            checkLoginStatus();
-            startCamera();
-        };
+        window.onload = startCamera;
     </script>
 </body>
 </html>
