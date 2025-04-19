@@ -193,7 +193,8 @@
 
         async function startCamera() {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
                 document.getElementById('camera').srcObject = stream;
             } catch (error) {
                 document.getElementById('error-message').textContent = "無法啟動攝影機：" + error.message;
