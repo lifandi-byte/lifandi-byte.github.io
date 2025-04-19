@@ -12,6 +12,7 @@
             min-height: 100vh;
             background-color: #f0f0f0;
             margin: 0;
+            position: relative;
         }
 
         #left-container, #right-container {
@@ -56,7 +57,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -100px; /* 適當減少負值，避免搜尋框過於靠上 */
+            margin-top: 20px; /* 調整搜尋框的位置，避免與攝影機重疊 */
         }
 
         #search-input {
@@ -85,7 +86,6 @@
             margin-right: 20px;
         }
 
-        /* 手語教學連結樣式 */
         #navigation a {
             color: blue;
             font-size: 18px;
@@ -98,7 +98,6 @@
             text-decoration: underline;
         }
 
-        /* 新增登入按鈕固定在右上角 */
         #login-button {
             position: absolute;
             top: 20px;
@@ -116,7 +115,6 @@
             background-color: darkblue;
         }
 
-        /* 查詢結果顯示框 */
         #result-box {
             margin-top: 20px;
             padding: 15px;
@@ -151,7 +149,6 @@
             <button id="search-button" onclick="search()">搜尋</button>
         </div>
 
-        <!-- 顯示查詢結果的區域 -->
         <div id="result-box">
             <p id="result-text">請輸入手語單字來搜尋</p>
         </div>
@@ -193,14 +190,7 @@
         function search() {
             let query = document.getElementById('search-input').value;
             if (query) {
-                // 查詢手語單字的邏輯
                 document.getElementById('result-text').textContent = `正在搜尋手語單字: ${query}`;
-
-                // 你可以在這裡加入手語字典查詢的邏輯
-                // 目前是顯示查詢的字串
-
-                // 如果要開啟搜尋結果頁面，可以像這樣：
-                // window.open(`https://www.google.com/search?q=${query}`, '_blank');
             }
         }
 
