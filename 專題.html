@@ -6,12 +6,13 @@
     <style>
         body {
             display: flex;
-            flex-direction: row; /* 左右排列 */
+            flex-direction: row;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
             background-color: #f0f0f0;
             margin: 0;
+            padding-bottom: 80px; /* 預留空間 */
         }
 
         #left-container, #right-container {
@@ -19,7 +20,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 50%; /* 左右各占一半空間 */
+            width: 50%;
             padding: 20px;
         }
 
@@ -56,7 +57,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -100px; /* 適當減少負值，避免搜尋框過於靠上 */
+            margin-top: -80px;
         }
 
         #search-input {
@@ -68,9 +69,9 @@
             border-radius: 5px;
         }
 
+        /* 🔧 修正這段 */
         #navigation {
-            position: absolute;
-            bottom: 20px;
+            margin-top: 40px;
             text-align: center;
             width: 100%;
         }
@@ -85,7 +86,6 @@
             margin-right: 20px;
         }
 
-        /* 手語教學連結樣式 */
         #navigation a {
             color: blue;
             font-size: 18px;
@@ -98,7 +98,6 @@
             text-decoration: underline;
         }
 
-        /* 新增登入按鈕固定在右上角 */
         #login-button {
             position: absolute;
             top: 20px;
@@ -116,7 +115,6 @@
             background-color: darkblue;
         }
 
-        /* 查詢結果顯示框 */
         #result-box {
             margin-top: 20px;
             padding: 15px;
@@ -135,7 +133,6 @@
     </style>
 </head>
 <body>
-    <!-- 右上角登入按鈕 -->
     <a id="login-button" href="login.html">登入系統</a>
 
     <div id="left-container">
@@ -151,7 +148,6 @@
             <button id="search-button" onclick="search()">搜尋</button>
         </div>
 
-        <!-- 顯示查詢結果的區域 -->
         <div id="result-box">
             <p id="result-text">請輸入手語單字來搜尋</p>
         </div>
@@ -193,14 +189,7 @@
         function search() {
             let query = document.getElementById('search-input').value;
             if (query) {
-                // 查詢手語單字的邏輯
                 document.getElementById('result-text').textContent = `正在搜尋手語單字: ${query}`;
-
-                // 你可以在這裡加入手語字典查詢的邏輯
-                // 目前是顯示查詢的字串
-
-                // 如果要開啟搜尋結果頁面，可以像這樣：
-                // window.open(`https://www.google.com/search?q=${query}`, '_blank');
             }
         }
 
