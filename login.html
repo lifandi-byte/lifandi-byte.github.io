@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>登入頁面</title>
-  <!-- ✅ 改為 compat 版本 -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script>
-    // Firebase 設定
     const firebaseConfig = {
       apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
       authDomain: "hand-sign-project.firebaseapp.com",
@@ -17,7 +15,6 @@
       appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
     };
 
-    // ✅ 初始化
     firebase.initializeApp(firebaseConfig);
   </script>
 </head>
@@ -41,11 +38,12 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      // ✅ 使用 firebase.auth()
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then(userCredential => {
           alert("登入成功！");
-          window.location.href = "專題.html";
+          // 登入成功後將登入狀態設為 true 並儲存
+          localStorage.setItem("loggedIn", "true");
+          window.location.href = "專題.html";  // 登入後重定向到專題頁面
         })
         .catch(error => {
           alert("登入失敗：" + error.message);
