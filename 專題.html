@@ -12,7 +12,6 @@
             min-height: 100vh;
             background-color: #f0f0f0;
             margin: 0;
-            position: relative;
         }
 
         #left-container, #right-container {
@@ -57,7 +56,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 20px; /* 調整搜尋框的位置，避免與攝影機重疊 */
+            margin-top: -100px; /* 適當減少負值，避免搜尋框過於靠上 */
         }
 
         #search-input {
@@ -86,6 +85,7 @@
             margin-right: 20px;
         }
 
+        /* 手語教學連結樣式 */
         #navigation a {
             color: blue;
             font-size: 18px;
@@ -98,6 +98,7 @@
             text-decoration: underline;
         }
 
+        /* 新增登入按鈕固定在右上角 */
         #login-button {
             position: absolute;
             top: 20px;
@@ -115,6 +116,7 @@
             background-color: darkblue;
         }
 
+        /* 查詢結果顯示框 */
         #result-box {
             margin-top: 20px;
             padding: 15px;
@@ -129,6 +131,12 @@
         #result-box p {
             font-size: 16px;
             color: #333;
+        }
+
+        /* 調整右側容器，避免與攝影機重疊 */
+        #right-container {
+            margin-top: 50px;  /* 增加上方間距，避免與攝影機重疊 */
+            position: relative;
         }
     </style>
 </head>
@@ -149,6 +157,7 @@
             <button id="search-button" onclick="search()">搜尋</button>
         </div>
 
+        <!-- 顯示查詢結果的區域 -->
         <div id="result-box">
             <p id="result-text">請輸入手語單字來搜尋</p>
         </div>
