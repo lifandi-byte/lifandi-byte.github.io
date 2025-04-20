@@ -129,13 +129,14 @@
             color: #333;
         }
 
-        /* 讓歡迎訊息顯示在右上角 */
+        /* 讓歡迎訊息顯示在登出按鈕旁邊 */
         #user-info {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 100px;  /* 調整這個數值來放置在登出按鈕旁邊 */
             font-weight: bold;
             color: #333;
+            white-space: nowrap; /* 防止文字換行 */
         }
     </style>
 </head>
@@ -162,7 +163,7 @@
 
     <!-- 使用者操作 UI -->
     <a id="login-button" href="login.html">登入系統</a>
-    <div id="user-info"></div>
+    <div id="user-info"></div> <!-- 顯示歡迎訊息的區域 -->
 
     <div id="left-container">
         <h1>手語</h1>
