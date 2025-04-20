@@ -131,42 +131,36 @@
         }
 
         #user-info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+            margin-top: 10px;
             font-weight: bold;
             color: #333;
         }
     </style>
 </head>
 <body>
-   <!-- 使用 Firebase SDK，並設置為模組 -->
-<!-- Firebase SDK 兼容版 -->
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
-<!-- Firebase 配置 -->
-<script>
-  const firebaseConfig = {
-      apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
-      authDomain: "hand-sign-project.firebaseapp.com",
-      projectId: "hand-sign-project",
-      storageBucket: "hand-sign-project.firebasestorage.app",
-      messagingSenderId: "338082830115",
-      appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
-  };
-
-  // 初始化 Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
-</script>
-
+    <!-- Firebase 設定 -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
+            authDomain: "hand-sign-project.firebaseapp.com",
+            projectId: "hand-sign-project",
+            storageBucket: "hand-sign-project.firebasestorage.app",
+            messagingSenderId: "338082830115",
+            appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
 
     <!-- 使用者操作 UI -->
     <a id="login-button" href="login.html">登入系統</a>
-    <div id="user-info"></div>
+    <div id="user-info"></div> <!-- 歡迎訊息顯示在這裡 -->
 
     <div id="left-container">
         <h1>手語</h1>
@@ -250,37 +244,31 @@
         });
 
         // Firebase 登入狀態監聽
-      
-          window.onload = () => {
-    const loginButton = document.getElementById('login-button');
-    const userInfo = document.getElementById('user-info');
+        window.onload = () => {
+            const loginButton = document.getElementById('login-button');
+            const userInfo = document.getElementById('user-info');
 
-    // 確保 firebase 初始化已完成
-    if (typeof firebase !== 'undefined') {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                loginButton.textContent = '登出';
-                loginButton.onclick = () => {
-                    firebase.auth().signOut().then(() => {
-                        alert('已登出');
-                        location.reload(); // 登出後重新載入頁面
-                    });
-                };
-                userInfo.textContent = `歡迎，${user.email}`;
-            } else {
-                loginButton.textContent = '登入系統';
-                loginButton.onclick = () => {
-                    window.location.href = 'login.html'; // 導向登入頁面
-                };
-                userInfo.textContent = '';
-            }
-        });
-    } else {
-        console.error("Firebase 尚未加載");
-    }
-};
-
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // 使用者已登入
+                    loginButton.textContent = '登出';
+                    loginButton.onclick = () => {
+                        firebase.auth().signOut().then(() => {
+                            alert('已登出');
+                            location.reload(); // 登出後重新載入頁面
+                        });
+                    };
+                    userInfo.textContent = `歡迎，${user.email}`;
+                } else {
+                    // 使用者未登入
+                    loginButton.textContent = '登入系統';
+                    loginButton.onclick = () => {
+                        window.location.href = 'login.html'; // 導向登入頁面
+                    };
+                    userInfo.textContent = '';
+                }
+            });
+        };
     </script>
-
 </body>
 </html>
