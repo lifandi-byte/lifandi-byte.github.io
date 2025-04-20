@@ -246,33 +246,32 @@
         });
 
         // Firebase 登入狀態監聽
-    <script>
-  window.onload = () => {
-    const loginButton = document.getElementById('login-button');
-    const userInfo = document.getElementById('user-info');
+        window.onload = () => {
+            const loginButton = document.getElementById('login-button');
+            const userInfo = document.getElementById('user-info');
 
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        // 使用者已登入
-        loginButton.textContent = '登出';
-        loginButton.onclick = () => {
-          firebase.auth().signOut().then(() => {
-            alert('已登出');
-            location.reload(); // 登出後重新載入頁面
-          });
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // 使用者已登入
+                    loginButton.textContent = '登出';
+                    loginButton.onclick = () => {
+                        firebase.auth().signOut().then(() => {
+                            alert('已登出');
+                            location.reload(); // 登出後重新載入頁面
+                        });
+                    };
+                    userInfo.textContent = `歡迎，${user.email}`;
+                } else {
+                    // 使用者未登入
+                    loginButton.textContent = '登入系統';
+                    loginButton.onclick = () => {
+                        window.location.href = 'login.html'; // 導向登入頁面
+                    };
+                    userInfo.textContent = '';
+                }
+            });
         };
-        userInfo.textContent = `歡迎，${user.email}`;
-      } else {
-        // 使用者未登入
-        loginButton.textContent = '登入系統';
-        loginButton.onclick = () => {
-          window.location.href = 'login.html'; // 導向登入頁面
-        };
-        userInfo.textContent = '';
-      }
-    });
-  };
-</script>
+    </script>
 
 </body>
 </html>
