@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>專題</title>
     <style>
+        /* === 以下為 CSS === */
         body {
             display: flex;
             flex-direction: row;
@@ -96,7 +97,6 @@
             text-decoration: underline;
         }
 
-        /* 登入按鈕 */
         #login-button {
             position: absolute;
             top: 20px;
@@ -114,7 +114,6 @@
             background-color: darkblue;
         }
 
-        /* 查詢結果 */
         #result-box {
             margin-top: 20px;
             padding: 15px;
@@ -131,7 +130,6 @@
             color: #333;
         }
 
-        /* 使用者資訊 */
         #user-info {
             position: absolute;
             top: 20px;
@@ -147,24 +145,23 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
 
+    <!-- Firebase 設定 -->
     <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
-        authDomain: "hand-sign-project.firebaseapp.com",
-        projectId: "hand-sign-project",
-        storageBucket: "hand-sign-project.firebasestorage.app",
-        messagingSenderId: "338082830115",
-        appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
-      };
-
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-      const auth = firebase.auth();
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
+            authDomain: "hand-sign-project.firebaseapp.com",
+            projectId: "hand-sign-project",
+            storageBucket: "hand-sign-project.firebasestorage.app",
+            messagingSenderId: "338082830115",
+            appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
     </script>
 
-    <!-- 登入按鈕 -->
+    <!-- 使用者操作 UI -->
     <a id="login-button" href="login.html">登入系統</a>
-    <!-- 使用者資訊 -->
     <div id="user-info"></div>
 
     <div id="left-container">
@@ -190,6 +187,7 @@
         </ul>
     </div>
 
+    <!-- 功能腳本 -->
     <script>
         let stream;
         let cameraOn = true;
@@ -224,7 +222,7 @@
                 db.collection("signs")
                   .where("word", "==", query)
                   .get()
-                  .then((snapshot) => {
+                  .then(snapshot => {
                       if (snapshot.empty) {
                           document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
                       } else {
@@ -234,38 +232,43 @@
                           });
                       }
                   })
-                  .catch((err) => {
+                  .catch(err => {
                       document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
                   });
             }
         }
 
-        // 監聽登入狀態變化
-       
-       window.onload = () => {
-        startCamera();
-
-        const loginButton = document.getElementById('login-button');
-        const userInfo = document.getElementById('user-info');
-
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                loginButton.textContent = '登出';
-                loginButton.href = '#';
-                loginButton.onclick = (e) => {
-                    e.preventDefault();
-                    auth.signOut().then(() => {
-                        alert('已登出');
-                        location.reload();
-                    });
-                };
-                userInfo.textContent = `歡迎，${user.email}`;
-            } else {
-                // 未登入跳轉到 login.html
-                window.location.href = 'login.html';
+        // Enter 鍵觸發搜尋
+        document.getElementById("search-input").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                search();
             }
         });
-    };
+
+        // Firebase 登入狀態監聽
+        window.onload = () => {
+            startCamera();
+            const loginButton = document.getElementById('login-button');
+            const userInfo = document.getElementById('user-info');
+
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    loginButton.textContent = '登出';
+                    loginButton.href = '#';
+                    loginButton.onclick = (e) => {
+                        e.preventDefault();
+                        auth.signOut().then(() => {
+                            alert('已登出');
+                            location.reload();
+                        });
+                    };
+                    userInfo.textContent = `歡迎，${user.email}`;
+                } else {
+                    // 未登入跳轉 login
+                    window.location.href = 'login.html';
+                }
+            });
+        };
     </script>
 </body>
 </html>
