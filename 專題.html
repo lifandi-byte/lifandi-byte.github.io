@@ -1,150 +1,55 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <title>專題</title>
+  <meta charset="UTF-8" />
+  <title>登入頁面</title>
   <style>
     body {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #f0f0f0;
-      margin: 0;
-      visibility: hidden; /* ← 預設隱藏畫面 */
-    }
-
-    #left-container, #right-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 50%;
-      padding: 20px;
-    }
-
-    h1 {
+      font-family: Arial, sans-serif;
       text-align: center;
-      width: 100%;
+      padding-top: 50px;
+      background-color: #f7f7f7;
     }
 
-    video {
-      width: 100%;
-      max-width: 640px;
-      border: 2px solid black;
+    form {
+      display: inline-block;
+      background: white;
+      padding: 30px;
       border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
+    input[type="email"], input[type="password"] {
+      width: 250px;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    input[type="submit"], input[type="reset"], button {
+      padding: 10px 15px;
+      margin: 5px;
       font-size: 16px;
       border: none;
-      background-color: #4CAF50;
-      color: white;
+      border-radius: 5px;
       cursor: pointer;
-      border-radius: 5px;
     }
 
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #search-box {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #search-input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    #navigation {
-      position: absolute;
-      bottom: 20px;
-      text-align: center;
-      width: 100%;
-    }
-
-    #navigation ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    #navigation li {
-      display: inline;
-      margin-right: 20px;
-    }
-
-    #navigation a {
-      color: blue;
-      font-size: 18px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    #navigation a:hover {
-      color: darkblue;
-      text-decoration: underline;
-    }
-
-    #login-button {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 10px 15px;
-      font-size: 16px;
-      background-color: blue;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    #login-button:hover {
-      background-color: darkblue;
-    }
-
-    #result-box {
-      margin-top: 20px;
-      padding: 15px;
-      width: 100%;
-      max-width: 400px;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-      background-color: #fff;
-      text-align: center;
-    }
-
-    #result-box p {
-      font-size: 16px;
-      color: #333;
-    }
+    input[type="submit"] { background-color: #4CAF50; color: white; }
+    input[type="reset"] { background-color: #ccc; }
+    button { background-color: #2196F3; color: white; }
 
     #user-info {
-      position: absolute;
-      top: 20px;
-      left: 20px;
+      margin-top: 20px;
       font-weight: bold;
-      color: #333;
     }
   </style>
-</head>
-<body>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
@@ -156,119 +61,52 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
   </script>
+</head>
+<body>
+  <h2>登入頁面</h2>
 
-  <a id="login-button" href="login.html">登入系統</a>
+  <form onsubmit="login(event)">
+    <label for="email">帳號（Email）:</label><br>
+    <input type="email" id="email" required><br>
+    <label for="password">密碼:</label><br>
+    <input type="password" id="password" required><br><br>
+
+    <input type="submit" value="登入">
+    <input type="reset" value="重設"><br><br>
+
+    <button type="button" onclick="window.location.href='專題.html'">返回上一頁</button>
+    <button type="button" onclick="window.location.href='register.html'">註冊帳號</button>
+  </form>
+
   <div id="user-info"></div>
 
-  <div id="left-container">
-    <h1>手語</h1>
-    <video id="camera" autoplay playsinline></video>
-    <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
-    <p id="error-message" style="color: red;"></p>
-  </div>
-
-  <div id="right-container">
-    <div id="search-box">
-      <input id="search-input" type="text" placeholder="搜尋...">
-      <button id="search-button" onclick="search()">搜尋</button>
-    </div>
-    <div id="result-box">
-      <p id="result-text">請輸入手語單字來搜尋</p>
-    </div>
-  </div>
-
-  <div id="navigation">
-    <ul>
-      <li><a href="handteach.html">手語教學</a></li>
-    </ul>
-  </div>
-
   <script>
-    let stream;
-    let cameraOn = true;
+    function login(event) {
+      event.preventDefault();
 
-    async function startCamera() {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        document.getElementById('camera').srcObject = stream;
-      } catch (error) {
-        document.getElementById('error-message').textContent = "無法啟動攝影機：" + error.message;
-      }
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          alert("登入成功！");
+          window.location.href = "專題.html";
+        })
+        .catch(error => {
+          alert("登入失敗：" + error.message);
+        });
     }
 
-    async function toggleCamera() {
-      if (cameraOn) {
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop());
-          document.getElementById('camera').srcObject = null;
-        }
-        document.getElementById('toggle-camera').textContent = '開啟攝影機';
-      } else {
-        await startCamera();
-        document.getElementById('toggle-camera').textContent = '關閉攝影機';
-      }
-      cameraOn = !cameraOn;
-    }
-
-    function search() {
-      let query = document.getElementById('search-input').value.trim();
-      if (query) {
-        document.getElementById('result-text').textContent = "搜尋中...";
-        db.collection("signs")
-          .where("word", "==", query)
-          .get()
-          .then((snapshot) => {
-            if (snapshot.empty) {
-              document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
-            } else {
-              snapshot.forEach(doc => {
-                const data = doc.data();
-                document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
-              });
-            }
-          })
-          .catch((err) => {
-            document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
-          });
-      }
-    }
-
-    auth.onAuthStateChanged(user => {
-      const loginButton = document.getElementById('login-button');
-      const userInfo = document.getElementById('user-info');
-
+    // 若已登入，自動跳轉至專題頁面
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        loginButton.textContent = '登出';
-        loginButton.href = '#';
-        loginButton.onclick = (e) => {
-          e.preventDefault();
-          auth.signOut().then(() => {
-            alert('已登出');
-            window.location.reload(); // 登出後重新整理
-          });
-        };
-        userInfo.textContent = `歡迎，${user.email}`;
-      } else {
-        loginButton.textContent = '登入系統';
-        loginButton.href = 'login.html';
-        loginButton.onclick = null;
-        userInfo.textContent = '';
-      }
-
-      // ✅ Firebase 準備完成後再顯示畫面
-      document.body.style.visibility = "visible";
-    });
-
-    document.getElementById("search-input").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        search();
+        document.getElementById("user-info").textContent = `目前已登入：${user.email}`;
+        setTimeout(() => {
+          window.location.href = "專題.html";
+        }, 1500); // 1.5秒後自動跳轉
       }
     });
-
-    window.onload = startCamera;
   </script>
 </body>
 </html>
