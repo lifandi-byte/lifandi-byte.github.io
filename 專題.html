@@ -241,10 +241,14 @@
         }
 
         // 監聽登入狀態變化
-        auth.onAuthStateChanged(user => {
-            const loginButton = document.getElementById('login-button');
-            const userInfo = document.getElementById('user-info');
+       
+       window.onload = () => {
+        startCamera();
 
+        const loginButton = document.getElementById('login-button');
+        const userInfo = document.getElementById('user-info');
+
+        auth.onAuthStateChanged(user => {
             if (user) {
                 loginButton.textContent = '登出';
                 loginButton.href = '#';
@@ -252,25 +256,16 @@
                     e.preventDefault();
                     auth.signOut().then(() => {
                         alert('已登出');
+                        location.reload();
                     });
                 };
                 userInfo.textContent = `歡迎，${user.email}`;
             } else {
-                loginButton.textContent = '登入系統';
-                loginButton.href = 'login.html';
-                loginButton.onclick = null;
-                userInfo.textContent = '';
+                // 未登入跳轉到 login.html
+                window.location.href = 'login.html';
             }
         });
-
-        // 允許 Enter 搜尋
-        document.getElementById("search-input").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                search();
-            }
-        });
-
-        window.onload = startCamera;
+    };
     </script>
 </body>
 </html>
