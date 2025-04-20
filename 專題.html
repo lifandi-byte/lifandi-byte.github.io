@@ -141,12 +141,12 @@
 </head>
 <body>
    <!-- 使用 Firebase SDK，並設置為模組 -->
-<!-- 使用 Firebase 兼容版本的 SDK -->
+<!-- Firebase SDK 兼容版 -->
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
-<!-- 初始化 Firebase -->
+<!-- Firebase 配置 -->
 <script>
   const firebaseConfig = {
       apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
@@ -156,11 +156,12 @@
       messagingSenderId: "338082830115",
       appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
   };
+
+  // 初始化 Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const auth = firebase.auth();
 </script>
-
 
 
     <!-- 使用者操作 UI -->
@@ -249,31 +250,36 @@
         });
 
         // Firebase 登入狀態監聽
-        window.onload = () => {
-            const loginButton = document.getElementById('login-button');
-            const userInfo = document.getElementById('user-info');
+      
+          window.onload = () => {
+    const loginButton = document.getElementById('login-button');
+    const userInfo = document.getElementById('user-info');
 
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    // 使用者已登入
-                    loginButton.textContent = '登出';
-                    loginButton.onclick = () => {
-                        firebase.auth().signOut().then(() => {
-                            alert('已登出');
-                            location.reload(); // 登出後重新載入頁面
-                        });
-                    };
-                    userInfo.textContent = `歡迎，${user.email}`;
-                } else {
-                    // 使用者未登入
-                    loginButton.textContent = '登入系統';
-                    loginButton.onclick = () => {
-                        window.location.href = 'login.html'; // 導向登入頁面
-                    };
-                    userInfo.textContent = '';
-                }
-            });
-        };
+    // 確保 firebase 初始化已完成
+    if (typeof firebase !== 'undefined') {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                loginButton.textContent = '登出';
+                loginButton.onclick = () => {
+                    firebase.auth().signOut().then(() => {
+                        alert('已登出');
+                        location.reload(); // 登出後重新載入頁面
+                    });
+                };
+                userInfo.textContent = `歡迎，${user.email}`;
+            } else {
+                loginButton.textContent = '登入系統';
+                loginButton.onclick = () => {
+                    window.location.href = 'login.html'; // 導向登入頁面
+                };
+                userInfo.textContent = '';
+            }
+        });
+    } else {
+        console.error("Firebase 尚未加載");
+    }
+};
+
     </script>
 
 </body>
