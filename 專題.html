@@ -1,276 +1,274 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="utf-8">
-    <title>專題</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
+  <meta charset="utf-8">
+  <title>專題</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+      visibility: hidden; /* ← 預設隱藏畫面 */
+    }
 
-        #left-container, #right-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 50%;
-            padding: 20px;
-        }
+    #left-container, #right-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      padding: 20px;
+    }
 
-        h1 {
-            text-align: center;
-            width: 100%;
-        }
+    h1 {
+      text-align: center;
+      width: 100%;
+    }
 
-        video {
-            width: 100%;
-            max-width: 640px;
-            border: 2px solid black;
-            border-radius: 10px;
-        }
+    video {
+      width: 100%;
+      max-width: 640px;
+      border: 2px solid black;
+      border-radius: 10px;
+    }
 
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
 
-        button:hover {
-            background-color: #45a049;
-        }
+    button:hover {
+      background-color: #45a049;
+    }
 
-        #search-box {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    #search-box {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        #search-input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    #search-input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-        #navigation {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            width: 100%;
-        }
+    #navigation {
+      position: absolute;
+      bottom: 20px;
+      text-align: center;
+      width: 100%;
+    }
 
-        #navigation ul {
-            list-style: none;
-            padding: 0;
-        }
+    #navigation ul {
+      list-style: none;
+      padding: 0;
+    }
 
-        #navigation li {
-            display: inline;
-            margin-right: 20px;
-        }
+    #navigation li {
+      display: inline;
+      margin-right: 20px;
+    }
 
-        #navigation a {
-            color: blue;
-            font-size: 18px;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    #navigation a {
+      color: blue;
+      font-size: 18px;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        #navigation a:hover {
-            color: darkblue;
-            text-decoration: underline;
-        }
+    #navigation a:hover {
+      color: darkblue;
+      text-decoration: underline;
+    }
 
-        /* 登入按鈕 */
-        #login-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            font-size: 16px;
-            background-color: blue;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    #login-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: blue;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        #login-button:hover {
-            background-color: darkblue;
-        }
+    #login-button:hover {
+      background-color: darkblue;
+    }
 
-        /* 查詢結果 */
-        #result-box {
-            margin-top: 20px;
-            padding: 15px;
-            width: 100%;
-            max-width: 400px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            text-align: center;
-        }
+    #result-box {
+      margin-top: 20px;
+      padding: 15px;
+      width: 100%;
+      max-width: 400px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      text-align: center;
+    }
 
-        #result-box p {
-            font-size: 16px;
-            color: #333;
-        }
+    #result-box p {
+      font-size: 16px;
+      color: #333;
+    }
 
-        /* 使用者資訊 */
-        #user-info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
+    #user-info {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
 
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
-        authDomain: "hand-sign-project.firebaseapp.com",
-        projectId: "hand-sign-project",
-        storageBucket: "hand-sign-project.firebasestorage.app",
-        messagingSenderId: "338082830115",
-        appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
-      };
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
+      authDomain: "hand-sign-project.firebaseapp.com",
+      projectId: "hand-sign-project",
+      storageBucket: "hand-sign-project.firebasestorage.app",
+      messagingSenderId: "338082830115",
+      appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
+    };
 
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-      const auth = firebase.auth();
-    </script>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+  </script>
 
-    <!-- 登入按鈕 -->
-    <a id="login-button" href="login.html">登入系統</a>
-    <!-- 使用者資訊 -->
-    <div id="user-info"></div>
+  <a id="login-button" href="login.html">登入系統</a>
+  <div id="user-info"></div>
 
-    <div id="left-container">
-        <h1>手語</h1>
-        <video id="camera" autoplay playsinline></video>
-        <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
-        <p id="error-message" style="color: red;"></p>
+  <div id="left-container">
+    <h1>手語</h1>
+    <video id="camera" autoplay playsinline></video>
+    <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
+    <p id="error-message" style="color: red;"></p>
+  </div>
+
+  <div id="right-container">
+    <div id="search-box">
+      <input id="search-input" type="text" placeholder="搜尋...">
+      <button id="search-button" onclick="search()">搜尋</button>
     </div>
-
-    <div id="right-container">
-        <div id="search-box">
-            <input id="search-input" type="text" placeholder="搜尋...">
-            <button id="search-button" onclick="search()">搜尋</button>
-        </div>
-        <div id="result-box">
-            <p id="result-text">請輸入手語單字來搜尋</p>
-        </div>
+    <div id="result-box">
+      <p id="result-text">請輸入手語單字來搜尋</p>
     </div>
+  </div>
 
-    <div id="navigation">
-        <ul>
-            <li><a href="handteach.html">手語教學</a></li>
-        </ul>
-    </div>
+  <div id="navigation">
+    <ul>
+      <li><a href="handteach.html">手語教學</a></li>
+    </ul>
+  </div>
 
-    <script>
-        let stream;
-        let cameraOn = true;
+  <script>
+    let stream;
+    let cameraOn = true;
 
-        async function startCamera() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                document.getElementById('camera').srcObject = stream;
-            } catch (error) {
-                document.getElementById('error-message').textContent = "無法啟動攝影機：" + error.message;
-            }
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('camera').srcObject = stream;
+      } catch (error) {
+        document.getElementById('error-message').textContent = "無法啟動攝影機：" + error.message;
+      }
+    }
+
+    async function toggleCamera() {
+      if (cameraOn) {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+          document.getElementById('camera').srcObject = null;
         }
+        document.getElementById('toggle-camera').textContent = '開啟攝影機';
+      } else {
+        await startCamera();
+        document.getElementById('toggle-camera').textContent = '關閉攝影機';
+      }
+      cameraOn = !cameraOn;
+    }
 
-        async function toggleCamera() {
-            if (cameraOn) {
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                    document.getElementById('camera').srcObject = null;
-                }
-                document.getElementById('toggle-camera').textContent = '開啟攝影機';
+    function search() {
+      let query = document.getElementById('search-input').value.trim();
+      if (query) {
+        document.getElementById('result-text').textContent = "搜尋中...";
+        db.collection("signs")
+          .where("word", "==", query)
+          .get()
+          .then((snapshot) => {
+            if (snapshot.empty) {
+              document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
             } else {
-                await startCamera();
-                document.getElementById('toggle-camera').textContent = '關閉攝影機';
+              snapshot.forEach(doc => {
+                const data = doc.data();
+                document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
+              });
             }
-            cameraOn = !cameraOn;
-        }
+          })
+          .catch((err) => {
+            document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
+          });
+      }
+    }
 
-        function search() {
-            let query = document.getElementById('search-input').value.trim();
-            if (query) {
-                document.getElementById('result-text').textContent = "搜尋中...";
-                db.collection("signs")
-                  .where("word", "==", query)
-                  .get()
-                  .then((snapshot) => {
-                      if (snapshot.empty) {
-                          document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
-                      } else {
-                          snapshot.forEach(doc => {
-                              const data = doc.data();
-                              document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
-                          });
-                      }
-                  })
-                  .catch((err) => {
-                      document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
-                  });
-            }
-        }
+    auth.onAuthStateChanged(user => {
+      const loginButton = document.getElementById('login-button');
+      const userInfo = document.getElementById('user-info');
 
-        // 監聽登入狀態變化
-        auth.onAuthStateChanged(user => {
-            const loginButton = document.getElementById('login-button');
-            const userInfo = document.getElementById('user-info');
+      if (user) {
+        loginButton.textContent = '登出';
+        loginButton.href = '#';
+        loginButton.onclick = (e) => {
+          e.preventDefault();
+          auth.signOut().then(() => {
+            alert('已登出');
+            window.location.reload(); // 登出後重新整理
+          });
+        };
+        userInfo.textContent = `歡迎，${user.email}`;
+      } else {
+        loginButton.textContent = '登入系統';
+        loginButton.href = 'login.html';
+        loginButton.onclick = null;
+        userInfo.textContent = '';
+      }
 
-            if (user) {
-                loginButton.textContent = '登出';
-                loginButton.href = '#';
-                loginButton.onclick = (e) => {
-                    e.preventDefault();
-                    auth.signOut().then(() => {
-                        alert('已登出');
-                    });
-                };
-                userInfo.textContent = `歡迎，${user.email}`;
-            } else {
-                loginButton.textContent = '登入系統';
-                loginButton.href = 'login.html';
-                loginButton.onclick = null;
-                userInfo.textContent = '';
-            }
-        });
+      // ✅ Firebase 準備完成後再顯示畫面
+      document.body.style.visibility = "visible";
+    });
 
-        // 允許 Enter 搜尋
-        document.getElementById("search-input").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                search();
-            }
-        });
+    document.getElementById("search-input").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        search();
+      }
+    });
 
-        window.onload = startCamera;
-    </script>
+    window.onload = startCamera;
+  </script>
 </body>
 </html>
