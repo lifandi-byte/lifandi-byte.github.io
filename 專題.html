@@ -134,6 +134,15 @@
             margin-top: 10px;
             font-weight: bold;
             color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        #user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -160,7 +169,7 @@
 
     <!-- 使用者操作 UI -->
     <a id="login-button" href="login.html">登入系統</a>
-    <div id="user-info"></div> <!-- 歡迎訊息顯示在這裡 -->
+    <div id="user-info"></div> <!-- 顯示頭像和歡迎訊息 -->
 
     <div id="left-container">
         <h1>手語</h1>
@@ -258,7 +267,9 @@
                             location.reload(); // 登出後重新載入頁面
                         });
                     };
-                    userInfo.textContent = `歡迎，${user.email}`;
+                    // 顯示使用者頭像
+                    const userImage = user.photoURL ? user.photoURL : 'default-avatar.png'; // 頭像預設圖片
+                    userInfo.innerHTML = `<img src="${userImage}" alt="User Avatar"> 歡迎，${user.email}`;
                 } else {
                     // 使用者未登入
                     loginButton.textContent = '登入系統';
