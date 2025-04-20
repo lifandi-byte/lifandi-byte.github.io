@@ -6,7 +6,7 @@
     <style>
         body {
             display: flex;
-            flex-direction: row; /* 左右排列 */
+            flex-direction: row;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -19,7 +19,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 50%; /* 左右各占一半空間 */
+            width: 50%;
             padding: 20px;
         }
 
@@ -56,7 +56,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -100px; /* 適當減少負值，避免搜尋框過於靠上 */
         }
 
         #search-input {
@@ -85,7 +84,6 @@
             margin-right: 20px;
         }
 
-        /* 手語教學連結樣式 */
         #navigation a {
             color: blue;
             font-size: 18px;
@@ -98,7 +96,7 @@
             text-decoration: underline;
         }
 
-        /* 新增登入按鈕固定在右上角 */
+        /* 登入按鈕 */
         #login-button {
             position: absolute;
             top: 20px;
@@ -116,7 +114,7 @@
             background-color: darkblue;
         }
 
-        /* 查詢結果顯示框 */
+        /* 查詢結果 */
         #result-box {
             margin-top: 20px;
             padding: 15px;
@@ -132,35 +130,42 @@
             font-size: 16px;
             color: #333;
         }
+
+        /* 使用者資訊 */
+        #user-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
 
-<script>
-  // Firebase 設定
-  const firebaseConfig = {
-    apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
-    authDomain: "hand-sign-project.firebaseapp.com",
-    projectId: "hand-sign-project",
-    storageBucket: "hand-sign-project.firebasestorage.app",
-    messagingSenderId: "338082830115",
-    appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
-  };
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
+        authDomain: "hand-sign-project.firebaseapp.com",
+        projectId: "hand-sign-project",
+        storageBucket: "hand-sign-project.firebasestorage.app",
+        messagingSenderId: "338082830115",
+        appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
+      };
 
-  // 初始化 Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
-</script>
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      const auth = firebase.auth();
+    </script>
 
-
-
-    <!-- 右上角登入按鈕 -->
+    <!-- 登入按鈕 -->
     <a id="login-button" href="login.html">登入系統</a>
+    <!-- 使用者資訊 -->
+    <div id="user-info"></div>
 
     <div id="left-container">
         <h1>手語</h1>
@@ -174,8 +179,6 @@
             <input id="search-input" type="text" placeholder="搜尋...">
             <button id="search-button" onclick="search()">搜尋</button>
         </div>
-
-        <!-- 顯示查詢結果的區域 -->
         <div id="result-box">
             <p id="result-text">請輸入手語單字來搜尋</p>
         </div>
@@ -194,7 +197,6 @@
         async function startCamera() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
                 document.getElementById('camera').srcObject = stream;
             } catch (error) {
                 document.getElementById('error-message').textContent = "無法啟動攝影機：" + error.message;
@@ -216,18 +218,57 @@
         }
 
         function search() {
-            let query = document.getElementById('search-input').value;
+            let query = document.getElementById('search-input').value.trim();
             if (query) {
-                // 查詢手語單字的邏輯
-                document.getElementById('result-text').textContent = `正在搜尋手語單字: ${query}`;
-
-                // 你可以在這裡加入手語字典查詢的邏輯
-                // 目前是顯示查詢的字串
-
-                // 如果要開啟搜尋結果頁面，可以像這樣：
-                // window.open(`https://www.google.com/search?q=${query}`, '_blank');
+                document.getElementById('result-text').textContent = "搜尋中...";
+                db.collection("signs")
+                  .where("word", "==", query)
+                  .get()
+                  .then((snapshot) => {
+                      if (snapshot.empty) {
+                          document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
+                      } else {
+                          snapshot.forEach(doc => {
+                              const data = doc.data();
+                              document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
+                          });
+                      }
+                  })
+                  .catch((err) => {
+                      document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
+                  });
             }
         }
+
+        // 監聽登入狀態變化
+        auth.onAuthStateChanged(user => {
+            const loginButton = document.getElementById('login-button');
+            const userInfo = document.getElementById('user-info');
+
+            if (user) {
+                loginButton.textContent = '登出';
+                loginButton.href = '#';
+                loginButton.onclick = (e) => {
+                    e.preventDefault();
+                    auth.signOut().then(() => {
+                        alert('已登出');
+                    });
+                };
+                userInfo.textContent = `歡迎，${user.email}`;
+            } else {
+                loginButton.textContent = '登入系統';
+                loginButton.href = 'login.html';
+                loginButton.onclick = null;
+                userInfo.textContent = '';
+            }
+        });
+
+        // 允許 Enter 搜尋
+        document.getElementById("search-input").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                search();
+            }
+        });
 
         window.onload = startCamera;
     </script>
