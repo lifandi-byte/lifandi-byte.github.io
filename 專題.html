@@ -272,6 +272,12 @@
                         window.location.href = 'login.html'; // 導向登入頁面
                     };
                     userInfo.textContent = '';
+                     const suggestionList = document.getElementById('suggestions');
+            db.collection("signs").get().then(snapshot => {
+                snapshot.forEach(doc => {
+                    const option = document.createElement("option");
+                    option.value = doc.data().word;
+                    suggestionList.appendChild(option);
                 }
             });
         };
