@@ -2,9 +2,9 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8">
-    <title>專題</title>
+    <title>專題 - 手語影片播放</title>
     <style>
-          body {
+        body {
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -13,7 +13,6 @@
             background-color: #f0f0f0;
             margin: 0;
         }
-
         #left-container, #right-container {
             display: flex;
             flex-direction: column;
@@ -22,19 +21,16 @@
             width: 50%;
             padding: 20px;
         }
-
         h1 {
             text-align: center;
             width: 100%;
         }
-
         video {
             width: 100%;
             max-width: 640px;
             border: 2px solid black;
             border-radius: 10px;
         }
-
         button {
             margin-top: 15px;
             padding: 10px 20px;
@@ -45,150 +41,50 @@
             cursor: pointer;
             border-radius: 5px;
         }
-
         button:hover {
             background-color: #45a049;
         }
-
-        #search-box {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #search-input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
         #navigation {
             position: absolute;
             bottom: 20px;
             text-align: center;
             width: 100%;
         }
-
         #navigation ul {
             list-style: none;
             padding: 0;
         }
-
         #navigation li {
             display: inline;
             margin-right: 20px;
         }
-
         #navigation a {
             color: blue;
             font-size: 18px;
             text-decoration: none;
             font-weight: bold;
         }
-
         #navigation a:hover {
             color: darkblue;
             text-decoration: underline;
         }
-
-        #login-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            font-size: 16px;
-            background-color: blue;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        #login-button:hover {
-            background-color: darkblue;
-        }
-
-        #result-box {
-            margin-top: 20px;
-            padding: 15px;
-            width: 100%;
-            max-width: 400px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            text-align: center;
-        }
-
-        #result-box p {
-            font-size: 16px;
-            color: #333;
-        }
-
-        /* 讓歡迎訊息顯示在登出按鈕旁邊 */
-        #user-info {
-            position: absolute;
-            top: 20px;
-            right: 100px;  /* 調整這個數值來放置在登出按鈕旁邊 */
-            font-weight: bold;
-            color: #333;
-            white-space: nowrap; /* 防止文字換行 */
-        }
-        #video-container {
-            margin-top: 15px;
-            width: 100%;
-            max-width: 400px;
-        }
     </style>
 </head>
 <body>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
-
-    <!-- Firebase 設定 -->
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
-            authDomain: "hand-sign-project.firebaseapp.com",
-            projectId: "hand-sign-project",
-            storageBucket: "hand-sign-project.firebasestorage.app",
-            messagingSenderId: "338082830115",
-            appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-    </script>
-
-    <!-- 使用者操作 UI -->
-    <a id="login-button" href="login.html">登入系統</a>
-    <div id="user-info"></div>
 
     <div id="left-container">
-        <h1>手語</h1>
+        <h1>手語攝影機</h1>
         <video id="camera" autoplay playsinline></video>
         <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
         <p id="error-message" style="color: red;"></p>
     </div>
 
     <div id="right-container">
-        <div id="search-box">
-            <input id="search-input" type="text" placeholder="搜尋..." list="suggestions">
-            <datalist id="suggestions"></datalist>
-            <button id="search-button" onclick="search()">搜尋</button>
-            <div id="video-container">
-                <video id="sign-video" controls></video>
-            </div>
-        </div>
-        <div id="result-box">
-            <p id="result-text">請輸入手語單字來搜尋</p>
-        </div>
+        <h1>手語影片播放</h1>
+        <video id="sign-video" controls>
+            <source src="https://lifandi-byte.github.io/hand-sign-videos/1.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放。
+        </video>
     </div>
 
     <div id="navigation">
@@ -197,7 +93,6 @@
         </ul>
     </div>
 
-    <!-- 功能腳本 -->
     <script>
         let stream;
         let cameraOn = true;
@@ -225,77 +120,8 @@
             cameraOn = !cameraOn;
         }
 
-        
-           
-              function search() {
-    let query = document.getElementById('search-input').value.trim().toLowerCase(); // 轉小寫
-    if (query) {
-        document.getElementById('result-text').textContent = "搜尋中...";
-        db.collection("signs")
-            .where("word", "==", query)
-            .get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                    document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
-                } else {
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
-                        if (data.videoUrl) {
-                            document.getElementById('sign-video').src = data.videoUrl;
-                        }
-                    });
-                }
-            })
-            .catch(err => {
-                document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
-            });
-    } else {
-        document.getElementById('result-text').textContent = "請輸入查詢字詞";
-    }
-}
-
-
-
-        document.getElementById("search-input").addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-                search();
-            }
-        });
-
-        window.onload = () => {
-            const loginButton = document.getElementById('login-button');
-            const userInfo = document.getElementById('user-info');
-
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    loginButton.textContent = '登出';
-                    loginButton.onclick = () => {
-                        firebase.auth().signOut().then(() => {
-                            alert('已登出');
-                            location.reload();
-                        });
-                    };
-                    userInfo.textContent = `歡迎，${user.email}`;
-                } else {
-                    loginButton.textContent = '登入系統';
-                    loginButton.onclick = () => {
-                        window.location.href = 'login.html';
-                    };
-                    userInfo.textContent = '';
-                }
-            });
-
-            // 載入所有單字供 datalist 使用
-            const suggestionList = document.getElementById('suggestions');
-            db.collection("signs").get().then(snapshot => {
-                snapshot.forEach(doc => {
-                    const option = document.createElement("option");
-                    option.value = doc.data().word;
-                    suggestionList.appendChild(option);
-                });
-            });
-        };
+        window.onload = startCamera;
     </script>
+
 </body>
 </html>
