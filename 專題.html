@@ -231,7 +231,7 @@
     let query = document.getElementById('search-input').value.trim().toLowerCase(); // 轉小寫
     if (query) {
         document.getElementById('result-text').textContent = "搜尋中...";
-        db.collection("handSigns")
+        db.collection("Signs")
             .where("word", "==", query)
             .get()
             .then(snapshot => {
