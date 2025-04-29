@@ -334,4 +334,37 @@
                     // 登入中
                     loginButton.textContent = '登出';
                     loginButton.onclick = () => {
-                        firebase.auth().signOut().then(() =>
+                        firebase.auth().signOut().then(() => {
+                            alert('已登出');
+                            location.reload();
+                        });
+                    };
+                    userInfo.textContent = `歡迎，${user.email}`;
+                    pleaseLogin.style.display = "none";
+                    authRequired.style.display = "flex";
+                    startCamera();
+
+                    // 載入 datalist
+                    const suggestionList = document.getElementById('suggestions');
+                    db.collection("signs").get().then(snapshot => {
+                        snapshot.forEach(doc => {
+                            const option = document.createElement("option");
+                            option.value = doc.data().word;
+                            suggestionList.appendChild(option);
+                        });
+                    });
+                } else {
+                    // 未登入
+                    loginButton.textContent = '登入系統';
+                    loginButton.onclick = () => {
+                        window.location.href = 'login.html';
+                    };
+                    userInfo.textContent = '';
+                    pleaseLogin.style.display = "flex";
+                    authRequired.style.display = "none";
+                }
+            });
+        };
+    </script>
+</body>
+</html>
