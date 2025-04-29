@@ -143,6 +143,38 @@
             font-size: 16px;
             color: #333;
         }
+        /* 未登入顯示區塊 */
+        #not-logged-in-box {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #bbb;
+            padding: 40px;
+            border-radius: 15px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        #not-logged-in-icon {
+            font-size: 60px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        #not-logged-in-box h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #not-logged-in-box p {
+            font-size: 16px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -169,6 +201,21 @@
     <!-- 使用者操作 UI -->
     <a id="login-button" href="login.html">登入系統</a>
     <div id="user-info"></div>
+
+<!-- 未登入時的提示區塊 -->
+    <div id="not-logged-in-box">
+        <div id="not-logged-in-icon">🔒</div>
+        <h2>尚未登入</h2>
+        <p>請先登入帳號以使用搜尋與攝影機功能</p>
+    </div>
+
+    <!-- 登入後才顯示的內容 -->
+    <div id="left-container">
+        <h1>手語</h1>
+        <video id="camera" autoplay playsinline></video>
+        <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
 
     <div id="left-container">
         <h1>手語</h1>
@@ -284,6 +331,9 @@
                         });
                     };
                     userInfo.textContent = `歡迎，${user.email}`;
+                    leftContainer.style.display = 'flex';
+                    rightContainer.style.display = 'flex';
+                    notLoggedInBox.style.display = 'none';
 
                     searchBox.style.display = 'flex';
                     toggleButton.style.display = 'inline-block';
@@ -310,6 +360,9 @@
                         window.location.href = 'login.html';
                     };
                     userInfo.textContent = '';
+                    leftContainer.style.display = 'none';
+                    rightContainer.style.display = 'none';
+                    notLoggedInBox.style.display = 'flex';
                 }
             });
         };
