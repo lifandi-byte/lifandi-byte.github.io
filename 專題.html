@@ -6,16 +6,17 @@
     <style>
         body {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
             background-color: #f0f0f0;
             margin: 0;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         #left-container, #right-container {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -143,7 +144,7 @@
             font-size: 16px;
             color: #333;
         }
-        /* 未登入顯示區塊 */
+
         #not-logged-in-box {
             display: none;
             flex-direction: column;
@@ -178,12 +179,10 @@
     </style>
 </head>
 <body>
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
-    <!-- Firebase 設定 -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
@@ -198,23 +197,13 @@
         const auth = firebase.auth();
     </script>
 
-    <!-- 使用者操作 UI -->
     <a id="login-button" href="login.html">登入系統</a>
     <div id="user-info"></div>
 
-<!-- 未登入時的提示區塊 -->
     <div id="not-logged-in-box">
         <div id="not-logged-in-icon">🔒</div>
         <h2>尚未登入</h2>
         <p>請先登入帳號以使用搜尋與攝影機功能</p>
-    </div>
-
-    <!-- 登入後才顯示的內容 -->
-    <div id="left-container">
-        <h1>手語</h1>
-        <video id="camera" autoplay playsinline></video>
-        <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
-        <p id="error-message" style="color: red;"></p>
     </div>
 
     <div id="left-container">
@@ -244,7 +233,6 @@
         </ul>
     </div>
 
-    <!-- 功能腳本 -->
     <script>
         let stream;
         let cameraOn = true;
@@ -276,25 +264,21 @@
             let query = document.getElementById('search-input').value.trim().toLowerCase();
             if (query) {
                 document.getElementById('result-text').textContent = "搜尋中...";
-                db.collection("handSigns")
-                    .where("word", "==", query)
-                    .get()
-                    .then(snapshot => {
-                        if (snapshot.empty) {
-                            document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
-                        } else {
-                            snapshot.forEach(doc => {
-                                const data = doc.data();
-                                document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
-                                if (data.videoUrl) {
-                                    document.getElementById('sign-video').src = data.videoUrl;
-                                }
-                            });
-                        }
-                    })
-                    .catch(err => {
-                        document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
-                    });
+                db.collection("signs").where("word", "==", query).get().then(snapshot => {
+                    if (snapshot.empty) {
+                        document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
+                    } else {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
+                            if (data.videoUrl) {
+                                document.getElementById('sign-video').src = data.videoUrl;
+                            }
+                        });
+                    }
+                }).catch(err => {
+                    document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
+                });
             } else {
                 document.getElementById('result-text').textContent = "請輸入查詢字詞";
             }
@@ -309,17 +293,9 @@
         window.onload = () => {
             const loginButton = document.getElementById('login-button');
             const userInfo = document.getElementById('user-info');
-            const searchBox = document.getElementById('search-box');
-            const toggleButton = document.getElementById('toggle-camera');
-            const camera = document.getElementById('camera');
-            const resultBox = document.getElementById('result-box');
-            const videoContainer = document.getElementById('video-container');
-
-            searchBox.style.display = 'none';
-            toggleButton.style.display = 'none';
-            camera.style.display = 'none';
-            videoContainer.style.display = 'none';
-            resultBox.innerHTML = '<p>請先登入以使用功能</p>';
+            const leftContainer = document.getElementById('left-container');
+            const rightContainer = document.getElementById('right-container');
+            const notLoggedInBox = document.getElementById('not-logged-in-box');
 
             firebase.auth().onAuthStateChanged(user => {
                 if (user) {
@@ -335,26 +311,17 @@
                     rightContainer.style.display = 'flex';
                     notLoggedInBox.style.display = 'none';
 
-                    searchBox.style.display = 'flex';
-                    toggleButton.style.display = 'inline-block';
-                    camera.style.display = 'block';
-                    videoContainer.style.display = 'block';
-                    resultBox.innerHTML = '<p id="result-text">請輸入手語單字來搜尋</p>';
-
+                    const suggestionList = document.getElementById('suggestions');
                     db.collection("signs").get().then(snapshot => {
                         snapshot.forEach(doc => {
                             const option = document.createElement("option");
                             option.value = doc.data().word;
-                            document.getElementById('suggestions').appendChild(option);
+                            suggestionList.appendChild(option);
                         });
                     });
 
                     startCamera();
-
                 } else {
-                    // 可選：直接導向 login.html
-                    // window.location.href = 'login.html';
-
                     loginButton.textContent = '登入系統';
                     loginButton.onclick = () => {
                         window.location.href = 'login.html';
