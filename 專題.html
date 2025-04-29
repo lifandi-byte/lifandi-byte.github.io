@@ -342,6 +342,7 @@
                     userInfo.textContent = `歡迎，${user.email}`;
                     pleaseLogin.style.display = "none";
                     authRequired.style.display = "flex";
+                    document.getElementById('navigation').style.display = 'none';
                     startCamera();
 
                     // 載入 datalist
@@ -364,6 +365,8 @@
                     userInfo.style.display = 'none';   
                     pleaseLogin.style.display = "flex";
                     authRequired.style.display = "none";
+                    document.getElementById('navigation').style.display = 'none'; // 隱藏導覽列
+
                 }
             });
         };
