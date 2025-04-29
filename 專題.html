@@ -344,6 +344,9 @@
                     authRequired.style.display = "flex";
                     startCamera();
 
+                    // 隱藏右上角的 user-info
+                    userInfo.style.display = "none";
+
                     // 載入 datalist
                     const suggestionList = document.getElementById('suggestions');
                     db.collection("signs").get().then(snapshot => {
@@ -360,6 +363,7 @@
                         window.location.href = 'login.html';
                     };
                     userInfo.textContent = '';
+                    userInfo.style.display = "block"; // 顯示 user-info 區域
                     pleaseLogin.style.display = "flex";
                     authRequired.style.display = "none";
                 }
