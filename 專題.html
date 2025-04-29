@@ -340,6 +340,8 @@
                         });
                     };
                     userInfo.textContent = `歡迎，${user.email}`;
+                    loginButton.style.display = 'inline-block';
+                    userInfo.style.display = 'inline-block';
                     pleaseLogin.style.display = "none";
                     authRequired.style.display = "flex";
                     document.getElementById('navigation').style.display = 'none';
