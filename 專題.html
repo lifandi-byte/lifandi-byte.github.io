@@ -233,7 +233,7 @@
         </div>
     </div>
 
-    <div id="navigation">
+    <div id="navigation"id="nav-auth" style="display: none;">
         <ul>
             <li><a href="handteach.html">手語教學</a></li>
         </ul>
@@ -303,6 +303,8 @@
             const leftContainer = document.getElementById('left-container');
             const rightContainer = document.getElementById('right-container');
             const notLoggedInBox = document.getElementById('not-logged-in-box');
+            const navAuth = document.getElementById('nav-auth');
+
 
             firebase.auth().onAuthStateChanged(user => {
                 if (user) {
@@ -317,6 +319,8 @@
                     leftContainer.style.display = 'flex';
                     rightContainer.style.display = 'flex';
                     notLoggedInBox.style.display = 'none';
+                    navAuth.style.display = 'block';
+
 
                     // 讀取 datalist suggestions
                     const suggestionList = document.getElementById('suggestions');
@@ -335,6 +339,7 @@
                         window.location.href = 'login.html';
                     };
                     userInfo.textContent = '';
+                    navAuth.style.display = 'none';
                     leftContainer.style.display = 'none';
                     rightContainer.style.display = 'none';
                     notLoggedInBox.style.display = 'flex';
