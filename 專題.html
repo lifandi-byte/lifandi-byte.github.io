@@ -249,7 +249,7 @@
             let query = document.getElementById('search-input').value.trim().toLowerCase();
             if (query) {
                 document.getElementById('result-text').textContent = "搜尋中...";
-                db.collection("signs")
+                db.collection("handSigns")
                     .where("word", "==", query)
                     .get()
                     .then(snapshot => {
