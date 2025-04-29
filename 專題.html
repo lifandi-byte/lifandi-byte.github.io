@@ -5,18 +5,46 @@
     <title>專題</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #login-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #login-button:hover {
+            background-color: darkblue;
+        }
+
+        #user-info {
+            position: absolute;
+            top: 20px;
+            right: 120px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #auth-required {
+            display: none;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         #left-container, #right-container {
-            display: none;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -68,6 +96,17 @@
             border-radius: 5px;
         }
 
+        #result-box {
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            text-align: center;
+        }
+
         #navigation {
             position: absolute;
             bottom: 20px;
@@ -94,33 +133,23 @@
 
         #navigation a:hover {
             color: darkblue;
-            text-decoration: underline;
         }
 
-        #login-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            font-size: 16px;
-            background-color: blue;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
+        /* 未登入顯示 */
+        #please-login {
+            display: none;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
         }
 
-        #login-button:hover {
-            background-color: darkblue;
-        }
-
-        #user-info {
-            position: absolute;
-            top: 20px;
-            right: 100px;
-            font-weight: bold;
-            color: #333;
-            white-space: nowrap;
+        #please-login-box {
+            background: white;
+            padding: 30px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
         }
 
         #video-container {
@@ -128,61 +157,15 @@
             width: 100%;
             max-width: 400px;
         }
-
-        #result-box {
-            margin-top: 20px;
-            padding: 15px;
-            width: 100%;
-            max-width: 400px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            text-align: center;
-        }
-
-        #result-box p {
-            font-size: 16px;
-            color: #333;
-        }
-
-        #not-logged-in-box {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #bbb;
-            padding: 40px;
-            border-radius: 15px;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
-            max-width: 500px;
-            text-align: center;
-        }
-
-        #not-logged-in-icon {
-            font-size: 60px;
-            color: #888;
-            margin-bottom: 20px;
-        }
-
-        #not-logged-in-box h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        #not-logged-in-box p {
-            font-size: 16px;
-            color: #666;
-        }
     </style>
 </head>
 <body>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
+    <!-- Firebase 設定 -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCiB7v1mdKuPMIB3SUHPpmriSXmAsQ5G3M",
@@ -197,33 +180,35 @@
         const auth = firebase.auth();
     </script>
 
-    <a id="login-button" href="login.html">登入系統</a>
+    <button id="login-button">登入系統</button>
     <div id="user-info"></div>
 
-    <div id="not-logged-in-box">
-        <div id="not-logged-in-icon">🔒</div>
-        <h2>尚未登入</h2>
-        <p>請先登入帳號以使用搜尋與攝影機功能</p>
+    <!-- 未登入畫面 -->
+    <div id="please-login">
+        <div id="please-login-box">請先登入以使用功能</div>
     </div>
 
-    <div id="left-container">
-        <h1>手語</h1>
-        <video id="camera" autoplay playsinline></video>
-        <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
-        <p id="error-message" style="color: red;"></p>
-    </div>
-
-    <div id="right-container">
-        <div id="search-box">
-            <input id="search-input" type="text" placeholder="搜尋..." list="suggestions">
-            <datalist id="suggestions"></datalist>
-            <button id="search-button" onclick="search()">搜尋</button>
-            <div id="video-container">
-                <video id="sign-video" controls></video>
-            </div>
+    <!-- 登入後功能畫面 -->
+    <div id="auth-required">
+        <div id="left-container">
+            <h1>手語</h1>
+            <video id="camera" autoplay playsinline></video>
+            <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
+            <p id="error-message" style="color: red;"></p>
         </div>
-        <div id="result-box">
-            <p id="result-text">請輸入手語單字來搜尋</p>
+
+        <div id="right-container">
+            <div id="search-box">
+                <input id="search-input" type="text" placeholder="搜尋..." list="suggestions">
+                <datalist id="suggestions"></datalist>
+                <button id="search-button" onclick="search()">搜尋</button>
+                <div id="video-container">
+                    <video id="sign-video" controls></video>
+                </div>
+            </div>
+            <div id="result-box">
+                <p id="result-text">請輸入手語單字來搜尋</p>
+            </div>
         </div>
     </div>
 
@@ -264,21 +249,25 @@
             let query = document.getElementById('search-input').value.trim().toLowerCase();
             if (query) {
                 document.getElementById('result-text').textContent = "搜尋中...";
-                db.collection("signs").where("word", "==", query).get().then(snapshot => {
-                    if (snapshot.empty) {
-                        document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
-                    } else {
-                        snapshot.forEach(doc => {
-                            const data = doc.data();
-                            document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
-                            if (data.videoUrl) {
-                                document.getElementById('sign-video').src = data.videoUrl;
-                            }
-                        });
-                    }
-                }).catch(err => {
-                    document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
-                });
+                db.collection("signs")
+                    .where("word", "==", query)
+                    .get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            document.getElementById('result-text').textContent = `找不到「${query}」的手語資料`;
+                        } else {
+                            snapshot.forEach(doc => {
+                                const data = doc.data();
+                                document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
+                                if (data.videoUrl) {
+                                    document.getElementById('sign-video').src = data.videoUrl;
+                                }
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        document.getElementById('result-text').textContent = "查詢錯誤：" + err.message;
+                    });
             } else {
                 document.getElementById('result-text').textContent = "請輸入查詢字詞";
             }
@@ -293,12 +282,12 @@
         window.onload = () => {
             const loginButton = document.getElementById('login-button');
             const userInfo = document.getElementById('user-info');
-            const leftContainer = document.getElementById('left-container');
-            const rightContainer = document.getElementById('right-container');
-            const notLoggedInBox = document.getElementById('not-logged-in-box');
+            const pleaseLogin = document.getElementById('please-login');
+            const authRequired = document.getElementById('auth-required');
 
             firebase.auth().onAuthStateChanged(user => {
                 if (user) {
+                    // 登入中
                     loginButton.textContent = '登出';
                     loginButton.onclick = () => {
                         firebase.auth().signOut().then(() => {
@@ -307,10 +296,11 @@
                         });
                     };
                     userInfo.textContent = `歡迎，${user.email}`;
-                    leftContainer.style.display = 'flex';
-                    rightContainer.style.display = 'flex';
-                    notLoggedInBox.style.display = 'none';
+                    pleaseLogin.style.display = "none";
+                    authRequired.style.display = "flex";
+                    startCamera();
 
+                    // 載入 datalist
                     const suggestionList = document.getElementById('suggestions');
                     db.collection("signs").get().then(snapshot => {
                         snapshot.forEach(doc => {
@@ -319,17 +309,15 @@
                             suggestionList.appendChild(option);
                         });
                     });
-
-                    startCamera();
                 } else {
+                    // 未登入
                     loginButton.textContent = '登入系統';
                     loginButton.onclick = () => {
                         window.location.href = 'login.html';
                     };
                     userInfo.textContent = '';
-                    leftContainer.style.display = 'none';
-                    rightContainer.style.display = 'none';
-                    notLoggedInBox.style.display = 'flex';
+                    pleaseLogin.style.display = "flex";
+                    authRequired.style.display = "none";
                 }
             });
         };
