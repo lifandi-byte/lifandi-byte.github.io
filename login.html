@@ -48,6 +48,12 @@
       box-sizing: border-box;
     }
 
+    .show-password-container {
+      margin-top: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
     input[type="submit"],
     input[type="reset"],
     button {
@@ -112,6 +118,10 @@
       <label for="password">密碼:</label>
       <input type="password" id="password" required>
 
+      <div class="show-password-container">
+        <input type="checkbox" id="show-password" onclick="togglePassword()"> 顯示密碼
+      </div>
+
       <input type="submit" value="登入">
       <input type="reset" value="重設" onclick="resetForm()"><br>
 
@@ -139,6 +149,12 @@
 
     function resetForm() {
       localStorage.removeItem("loggedIn");
+    }
+
+    function togglePassword() {
+      const passwordField = document.getElementById("password");
+      const showPasswordCheckbox = document.getElementById("show-password");
+      passwordField.type = showPasswordCheckbox.checked ? "text" : "password";
     }
   </script>
 </body>
