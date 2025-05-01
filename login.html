@@ -50,8 +50,8 @@
 
     .show-password-container {
       margin-top: 10px;
-      text-align: left;
       font-size: 14px;
+      text-align: left;
     }
 
     input[type="submit"],
@@ -104,7 +104,6 @@
       messagingSenderId: "338082830115",
       appId: "1:338082830115:web:95ca6cd329dc49b1191e96"
     };
-
     firebase.initializeApp(firebaseConfig);
   </script>
 </head>
@@ -119,7 +118,9 @@
       <input type="password" id="password" required>
 
       <div class="show-password-container">
-        <input type="checkbox" id="show-password" onclick="togglePassword()"> 顯示密碼
+        <label>
+          <input type="checkbox" id="show-password" onclick="togglePassword()"> 顯示密碼
+        </label>
       </div>
 
       <input type="submit" value="登入">
@@ -152,9 +153,8 @@
     }
 
     function togglePassword() {
-      const passwordField = document.getElementById("password");
-      const showPasswordCheckbox = document.getElementById("show-password");
-      passwordField.type = showPasswordCheckbox.checked ? "text" : "password";
+      const passwordInput = document.getElementById('password');
+      passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
     }
   </script>
 </body>
