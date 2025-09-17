@@ -291,7 +291,7 @@
             if (query) {
                 document.getElementById('result-text').textContent = "搜尋中...";
                 db.collection("signs")   // ✅ 已改成 signs
-                    .where("word", "==", query)
+                    .where("chinese", "==", query)
                     .get()
                     .then(snapshot => {
                         if (snapshot.empty) {
@@ -349,7 +349,7 @@
                     db.collection("signs").get().then(snapshot => {  // ✅ 這裡也統一用 signs
                         snapshot.forEach(doc => {
                             const option = document.createElement("option");
-                            option.value = doc.data().word;
+                            option.value = doc.data().chinese;
                             suggestionList.appendChild(option);
                         });
                     });
@@ -371,3 +371,4 @@
     </script>
 </body>
 </html>
+
