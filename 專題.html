@@ -293,7 +293,7 @@
             let query = document.getElementById('search-input').value.trim().toLowerCase();
             if (query) {
                 document.getElementById('result-text').textContent = "搜尋中...";
-                db.collection("handSigns")
+                db.collection("signs")
                     .where("word", "==", query)
                     .get()
                     .then(snapshot => {
@@ -375,3 +375,4 @@
     </script>
 </body>
 </html>
+
