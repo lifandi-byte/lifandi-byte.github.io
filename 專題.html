@@ -299,7 +299,7 @@
                         } else {
                             snapshot.forEach(doc => {
                                 const data = doc.data();
-                                document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.description}`;
+                                document.getElementById('result-text').textContent = `單字：${data.word}\n說明：${data.chinese}`;
                                 if (data.videoUrl) {
                                     document.getElementById('sign-video').src = data.videoUrl;
                                 }
@@ -371,4 +371,5 @@
     </script>
 </body>
 </html>
+
 
