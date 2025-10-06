@@ -287,7 +287,7 @@
             let query = document.getElementById('search-input').value.trim().toLowerCase();
             if (query) {
                 document.getElementById('result-text').textContent = "搜尋中...";
-                db.collection("signs")   // ✅ 已改成 signs
+                db.collection("sign")   // ✅ 已改成 signs
                     .where("chinese", "==", query)
                     .get()
                     .then(snapshot => {
@@ -343,7 +343,7 @@
 
                     // 載入 datalist
                     const suggestionList = document.getElementById('suggestions');
-                    db.collection("signs").get().then(snapshot => {  // ✅ 這裡也統一用 signs
+                    db.collection("sign").get().then(snapshot => {  // ✅ 這裡也統一用 signs
                         snapshot.forEach(doc => {
                             const option = document.createElement("option");
                             option.value = doc.data().chinese;
@@ -368,3 +368,4 @@
     </script>
 </body>
 </html>
+
