@@ -197,7 +197,7 @@
 
     async function loadModel() {
       try {
-        session = await ort.InferenceSession.create("models/best.onnx");
+        session = await ort.InferenceSession.create("https://lifandi-byte.github.io/hand-sign-videos/models/best.onnx");
         document.getElementById("detect-result").textContent = "✅ 模型已載入，開始偵測中...";
       } catch (err) {
         document.getElementById("detect-result").textContent = "❌ 模型載入失敗：" + err.message;
@@ -303,3 +303,4 @@
 </body>
 </html>
 改哪裡
+
