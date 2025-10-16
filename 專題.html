@@ -87,10 +87,19 @@
     }
 
     async function toggleCamera() {
-      if(cameraOn){ stream.getTracks().forEach(t=>t.stop()); document.getElementById('camera').srcObject=null; document.getElementById('toggle-camera').textContent='開啟攝影機'; }
-      else{ await startCamera(); document.getElementById('toggle-camera').textContent='關閉攝影機'; }
-      cameraOn = !cameraOn;
+  if(cameraOn){
+    if(stream){            // ✅ 確認 stream 存在再關閉
+      stream.getTracks().forEach(t=>t.stop());
+      document.getElementById('camera').srcObject=null;
     }
+    document.getElementById('toggle-camera').textContent='開啟攝影機';
+  } else {
+    await startCamera();
+    document.getElementById('toggle-camera').textContent='關閉攝影機';
+  }
+  cameraOn = !cameraOn;
+}
+
 
     async function loadModel() {
       try{
@@ -136,3 +145,4 @@
   </script>
 </body>
 </html>
+
