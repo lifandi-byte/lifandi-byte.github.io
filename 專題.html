@@ -7,7 +7,7 @@
     <style>
         body {
             margin: 0;
-            padding-top: 5px; /* 整個頁面下移 */
+            
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
         }
@@ -279,8 +279,11 @@
       try {
         session = await ort.InferenceSession.create('https://lifandi-byte.github.io/models/best.onnx');
         document.getElementById('detect-result').textContent='✅ 模型已載入';
+        console.log("模型 session", session);
+
       } catch(e) {
-        document.getElementById('detect-result').textContent='❌ 模型載入失敗';
+    document.getElementById('detect-result').textContent=`❌ 模型載入失敗: ${e.message}`;
+          
       }
     }
 
@@ -349,5 +352,6 @@
 
 </body>
 </html>
+
 
 
