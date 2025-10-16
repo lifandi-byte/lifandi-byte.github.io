@@ -197,7 +197,7 @@
 
     async function loadModel() {
       try {
-        const session = await ort.InferenceSession.create("https://lifandi-byte.github.io/models/best.onnx");
+session = await ort.InferenceSession.create("https://lifandi-byte.github.io/models/best.onnx");       
         document.getElementById("detect-result").textContent = "✅ 模型已載入，開始偵測中...";
       } catch (err) {
         document.getElementById("detect-result").textContent = "❌ 模型載入失敗：" + err.message;
@@ -303,6 +303,7 @@
 </body>
 </html>
 改哪裡
+
 
 
 
