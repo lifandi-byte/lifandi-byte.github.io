@@ -102,11 +102,12 @@
 
 
     async function loadModel() {
-      try{
-        session = await ort.InferenceSession.create('https://lifandi-byte.github.io/models/best.onnx');
-        document.getElementById('detect-result').textContent='✅ 模型已載入';
-      }catch(e){ document.getElementById('detect-result').textContent='❌ 模型載入失敗'; }
-    }
+      try {
+  session = await ort.InferenceSession.create('https://lifandi-byte.github.io/models/best.onnx');
+  console.log("模型 session", session);
+} catch(e) {
+  console.error("載入模型失敗", e);
+}
 
     function search(){
       const query=document.getElementById('search-input').value.trim();
@@ -145,4 +146,5 @@
   </script>
 </body>
 </html>
+
 
