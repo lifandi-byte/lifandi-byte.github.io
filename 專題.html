@@ -279,8 +279,11 @@
       try {
         session = await ort.InferenceSession.create('https://lifandi-byte.github.io/models/best.onnx');
         document.getElementById('detect-result').textContent='✅ 模型已載入';
+          console.log("模型 session", session);
       } catch(e) {
         document.getElementById('detect-result').textContent='❌ 模型載入失敗';
+        document.getElementById('detect-result').textContent = `❌ 模型載入失敗: ${e.message}`;
+
       }
     }
 
@@ -349,6 +352,7 @@
 
 </body>
 </html>
+
 
 
 
