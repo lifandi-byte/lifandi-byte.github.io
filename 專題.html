@@ -279,7 +279,9 @@
 
     async function loadModel() {
       try {
-session = await ort.InferenceSession.create('https://github.com/lifandi-byte/lifandi-byte.github.io/releases/download/v1.0/best.onnx');
+const session = await ort.InferenceSession.create(
+  "https://lifandi-byte.github.io/models/best.onnx"
+);
         document.getElementById('detect-result').textContent='✅ 模型已載入';
         console.log("模型 session", session);
 
@@ -354,6 +356,7 @@ session = await ort.InferenceSession.create('https://github.com/lifandi-byte/lif
 
 </body>
 </html>
+
 
 
 
