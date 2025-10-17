@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -205,6 +206,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 
   <script>
     // Firebase 初始化
@@ -279,7 +281,7 @@
 
     async function loadModel() {
       try {
-session = await ort.InferenceSession.create(
+const session = await ort.InferenceSession.create(
   "https://lifandi-byte.github.io/models/best.onnx"
 );
         document.getElementById('detect-result').textContent='✅ 模型已載入';
@@ -356,8 +358,6 @@ session = await ort.InferenceSession.create(
 
 </body>
 </html>
-
-
 
 
 
