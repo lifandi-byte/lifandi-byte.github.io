@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -9,7 +7,6 @@
     <style>
         body {
             margin: 0;
-            
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
         }
@@ -44,7 +41,7 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh); /* 保留下移空間 */
+            min-height: calc(100vh);
         }
 
         #left-panel, #right-panel {
@@ -56,10 +53,7 @@
             padding: 20px;
         }
 
-        h1 {
-            text-align: center;
-            width: 100%;
-        }
+        h1 { text-align: center; width: 100%; }
 
         video {
             width: 100%;
@@ -79,9 +73,7 @@
             border-radius: 5px;
         }
 
-        button:hover {
-            background-color: #45a049;
-        }
+        button:hover { background-color: #45a049; }
 
         #search-box {
             width: 100%;
@@ -112,34 +104,6 @@
             text-align: center;
         }
 
-        #navigation {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            width: 100%;
-        }
-
-        #navigation ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        #navigation li {
-            display: inline;
-            margin-right: 20px;
-        }
-
-        #navigation a {
-            color: blue;
-            font-size: 18px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        #navigation a:hover {
-            color: darkblue;
-        }
-
         #please-login {
             display: none;
             min-height: calc(100vh);
@@ -161,17 +125,8 @@
             width: 100%;
         }
 
-        #please-login-box h2 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        #please-login-box p {
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 30px;
-        }
+        #please-login-box h2 { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        #please-login-box p { font-size: 18px; color: #555; margin-bottom: 30px; }
 
         #please-login-box button {
             padding: 15px 30px;
@@ -184,24 +139,13 @@
             transition: background-color 0.3s;
         }
 
-        #please-login-box button:hover {
-            background-color: #45a049;
-        }
-
-        #not-logged-in-icon {
-            font-size: 48px;
-            margin-top: 20px;
-        }
-
-        #video-container {
-            margin-top: 15px;
-            width: 100%;
-            max-width: 400px;
-        }
+        #please-login-box button:hover { background-color: #45a049; }
+        #not-logged-in-icon { font-size: 48px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
+  <!-- Firebase & ONNX -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
@@ -225,6 +169,7 @@
   <button id="login-button">登入系統</button>
   <div id="user-info"></div>
 
+  <!-- 未登入提示 -->
   <div id="please-login">
     <div id="please-login-box">
       <h2>請先登入以使用手語辨識</h2>
@@ -234,10 +179,12 @@
     </div>
   </div>
 
+  <!-- 主功能區 -->
   <div id="auth-required">
     <div id="left-panel">
       <h1>🖐 手語辨識系統</h1>
       <video id="camera" autoplay playsinline></video>
+      <canvas id="snapshot" width="320" height="240" style="display:none;"></canvas>
       <button id="toggle-camera" onclick="toggleCamera()">關閉攝影機</button>
       <div id="detect-result">🔍 模型載入中...</div>
     </div>
@@ -254,6 +201,7 @@
   <script>
     let stream, session;
     let cameraOn = true;
+    let captureInterval;
 
     async function startCamera() {
       try {
@@ -270,26 +218,43 @@
           stream.getTracks().forEach(t=>t.stop());
           document.getElementById('camera').srcObject = null;
         }
+        clearInterval(captureInterval);
         document.getElementById('toggle-camera').textContent='開啟攝影機';
       } else {
         await startCamera();
         document.getElementById('toggle-camera').textContent='關閉攝影機';
+        startAutoCapture();
       }
       cameraOn = !cameraOn;
     }
 
     async function loadModel() {
       try {
-const session = await ort.InferenceSession.create(
-  "https://lifandi-byte.github.io/models/best.onnx"
-);
+        session = await ort.InferenceSession.create("https://lifandi-byte.github.io/models/best.onnx");
         document.getElementById('detect-result').textContent='✅ 模型已載入';
         console.log("模型 session", session);
-
+        startAutoCapture(); // 🔹模型載入後自動啟動截圖
       } catch(e) {
-    document.getElementById('detect-result').textContent=`❌ 模型載入失敗: ${e.message}`;
-          
+        document.getElementById('detect-result').textContent=`❌ 模型載入失敗: ${e.message}`;
       }
+    }
+
+    // 🔸 每秒截圖一次
+    function startAutoCapture() {
+      const video = document.getElementById('camera');
+      const canvas = document.getElementById('snapshot');
+      const ctx = canvas.getContext('2d');
+
+      if (captureInterval) clearInterval(captureInterval);
+
+      captureInterval = setInterval(() => {
+        if (!cameraOn || video.readyState < 2) return;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imgData = canvas.toDataURL('image/png');
+        console.log('📸 截圖時間:', new Date().toLocaleTimeString());
+        // 未來這裡可以加上模型推論部分，例如：
+        // predict(imgData);
+      }, 1000);
     }
 
     function search() {
@@ -319,6 +284,7 @@ const session = await ort.InferenceSession.create(
     document.getElementById('search-button').onclick = search;
     document.getElementById('search-input').addEventListener('keydown', e => { if(e.key==='Enter') search(); });
 
+    // 登入檢查
     window.onload = async () => {
       const loginBtn = document.getElementById('login-button');
       const userInfo = document.getElementById('user-info');
@@ -354,17 +320,5 @@ const session = await ort.InferenceSession.create(
       });
     };
   </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
