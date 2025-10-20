@@ -230,7 +230,11 @@
 
     async function loadModel() {
       try {
-        session = await ort.InferenceSession.create("https://lifandi-byte.github.io/models/best.onnx");
+       const session = await ort.InferenceSession.create(
+  "https://raw.githubusercontent.com/lifandi-byte/lifandi-byte.github.io/main/models/best.onnx",
+  { executionProviders: ['wasm'] }
+);
+
         document.getElementById('detect-result').textContent='✅ 模型已載入';
         console.log("模型 session", session);
         startAutoCapture(); // 🔹模型載入後自動啟動截圖
@@ -322,3 +326,4 @@
   </script>
 </body>
 </html>
+
